@@ -12,6 +12,7 @@
 | OMS-R-SW  | Open vSwitch |
 | Servers   |
 | OMS-RS1   | RedOs |  2 G |   15G   |
-
-
-
+| PCs       |
+| PC0       | Astra |  2 G |   15G   |
+| PC2       | Astra |  2 G |   10G   |
+| PC3       | Astra |  2 G |   10G   |
