@@ -1,0 +1,11 @@
+<network>
+  <name>ovs-network</name>
+  <forward mode='bridge'/>
+  <bridge name='ovs-br0'/>
+  <virtualport type='openvswitch'/>
+  <portgroup name='default'>
+    <vlan>
+      <tag id='1'/>
+    </vlan>
+  </portgroup>
+</network>

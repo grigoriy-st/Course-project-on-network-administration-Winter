@@ -6,19 +6,22 @@
 - DHCP Snooping
 - BPDU Guard на портах доступа
 - LACP
+- 802.1q
+- 802.11
 
 ## L3
 
-- Замена GRE на IPsec для VPN с филиалом
-- ACL для трафика, идущего в VPN
+- IPsec
+- ACL
 - NAT
 - VRRP
+- OSPF
 - VLAN сегментация
 
 ## L7
 
 - Zabbix
-- SNMP на Eltex
+- SNMP
 - SSH
 - Ansible
 - NTP

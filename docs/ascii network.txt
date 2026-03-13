@@ -1,24 +1,25 @@
-                          [ DomRu-ISP ] 
-                            /-----\
-                            |  R  |
-                            \-----/
-                            /
-                           /
-                     [ OMS-UR ]
-                       /-----\                          | ------ |
-                       |  R  | ------------ [ OMS-RS1 ] | Server |
-                       \-----/                          | ------ |
-                      /       \
-                     /         \
-            [ OMS-D1-LR ]     [ OMS-D1-RR ]
-              /-----\              /-----\
-              |  R  |  - - GRE - - |  R   |
-              \-----/              \-----/
-            /                           \
-           /                             \
-          /                               \
-    [ OMS-L-SW ] - - - - - - - - - - - [ OMS-R-SW ]
-[ <-- Switch  --> ]                  [ <-- Switch  --> ]  ---- [ OMS-WRR1 ]  - - [wifi] - - [PC4]
-   /     |      \                           /    \
-PC0     PC1    PC2(ADMIN)                 PC3     --- [ OMS-WRR2 ]  - - [wifi] - - [PC5]
+                              [ DomRu-ISP ] 
+                                /-----\
+                                |  R  |
+                                \-----/
+                                /
+                               /
+                         [ OMS-UR ]
+                           /-----\                          | ------ |
+                           |  R  | ------------ [ OMS-RS1 ] | Server |
+                           \-----/                          | ------ |
+                       /            \
+                      /              \
+                     /                \
+            [ OMS-D1-LR ]            [ OMS-D1-RR ]
+              /-----\                     /-----\
+              |  R  |  - - -  IPSec - - - |  R   |
+              \-----/                     \-----/
+            /                                  \
+           /                                    \
+          /                                      \
+    [ OMS-L-SW ] - - - - - - - - - - - - - - - [ OMS-R-SW ]
+[ <-- Switch  --> ]                         [ <-- Switch  --> ]  ---- [ OMS-WRR1 ]  - - [wifi] - - [PC4]
+   /     |      \                                  /    \
+PC0     PC1    PC2(ADMIN)                        PC3     --- [ OMS-WRR2 ]  - - [wifi] - - [PC5]
 
