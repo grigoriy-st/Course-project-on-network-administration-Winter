@@ -1,12 +1,6 @@
 #!/bin/bash
 
-declare -A network_params=(
-  # network_name : bridge_name
-  ["wan"]="br-wan"
-  ["core"]="br-core"
-  ["switch-l"]="br-sw-1"
-  ["switch-r"]="br-sw-r"
-)
+source vars.sh
 
 # network files creation
 create_network_files() {
@@ -32,5 +26,21 @@ start_networks() {
   done
 }
 
-create_network_files
-start_networks
+# create_network_files
+# start_networks
+
+start_virsh_networks() {
+  for net_file_name in ${!local_net_files[@]}; do
+      net_name="${local_net_files[$net_file_name]}"
+      
+      sudo virsh net-define "../configs/networks/$net_file_name.xml"
+      sudo virsh net-start "$net_name"
+      sudo virsh net-autostart "$net_name"
+
+      if [[ $? -eq 0 ]]; then  
+        echo "Network $net_name with int ${local_net_files[$net_name]} is created!"
+      fi
+  done
+}
+
+start_virsh_networks
