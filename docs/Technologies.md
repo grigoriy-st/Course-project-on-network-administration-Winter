@@ -11,7 +11,7 @@
 
 ## L3
 
-- IPsec
+- GRE/IPsec VPN
 - ACL
 - NAT
 - VRRP
@@ -20,6 +20,7 @@
 
 ## L7
 
+- DNS
 - Zabbix
 - SNMP
 - SSH

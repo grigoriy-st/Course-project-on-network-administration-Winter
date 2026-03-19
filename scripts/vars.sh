@@ -1,6 +1,6 @@
 #!/bin/bash
 
-declare -A network_params=(
+declare -A NETWORK_PARAMS=(
   # network_name : bridge_name
   ["wan"]="br-wan,100.64.0.0/30"
   ["core"]="br-core,"
@@ -8,9 +8,21 @@ declare -A network_params=(
   ["switch-r"]="br-sw-r"
 )
 
-declare -A local_net_files=(
-    ["net-core-ur-lr"]="core-ur-lr"
-    ["net-core-ur-rr"]="core-ur-rr"
-    ["net-reserve-lr-rsw"]="reserve-lr-rsw"
-    ["net-reserve-rr-sw"]="reserve-rr-lsw"
+declare -A LOCAL_NET_FILES=(
+    # net_filename : net_name
+    ["ur-lr"]="ur-lr"
+    ["ur-rr"]="ur-rr"
+    # reserve routes
+    ["r-lr-rsw"]="r-lr-rsw"
+    ["r-rr-lsw"]="r-rr-lsw"
+)
+
+declare -A VM_NETWORKS=(
+    ["DomRU-ISP"]="default"
+    ["OMS-UR"]="default,ur-lr,ur-rr"
+    ["OMS-D1-LR"]="ur-lr,r-lr-rsw"
+    ["OMS-D2-RR"]="ur-rr,r-rr-lsw"
+    ["OMS-WRR1"]="guest"
+    ["OMS-LSW"]="ur-lr,r-rr-lsw"
+    ["OMS-RSW"]="r-lr-rsw,guest"
 )
