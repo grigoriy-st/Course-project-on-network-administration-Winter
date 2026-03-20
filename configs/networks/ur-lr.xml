@@ -1,0 +1,11 @@
+<!-- ur-lr.xml -->
+<network>
+  <name>ur-lr</name>
+  <bridge name='vbr-ur-lr' stp='on' delay='0'/>
+  <ip address='172.16.1.254' netmask='255.255.255.252'>
+    <dhcp>
+      <host mac='52:54:00:aa:aa:01' ip='172.16.1.1'/>  <!-- UR -->
+      <host mac='52:54:00:bb:bb:01' ip='172.16.1.2'/>  <!-- LR -->
+    </dhcp>
+  </ip>
+</network>

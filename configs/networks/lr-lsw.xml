@@ -1,0 +1,7 @@
+<!-- lr-lsw.xml -->
+<network>
+    <name>lr-lsw</name>
+    <forward mode='bridge'/>
+    <bridge name='OMS-LSW'/>
+    <virtualport type='openvswitch'/>
+</network>

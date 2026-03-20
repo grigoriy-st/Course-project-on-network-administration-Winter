@@ -1,0 +1,11 @@
+<!-- r-rr-lsw.xml -->
+<network>
+  <name>r-rr-lsw</name>
+  <bridge name='vbr-r-rr-lsw' stp='on' delay='0'/>
+  <ip address='172.16.4.1' netmask='255.255.255.252'>
+    <dhcp>
+      <host mac='52:54:00:cc:cc:03' ip='172.16.4.1'/>
+      <host mac='52:54:00:ee:ee:01' ip='172.16.4.2'/>
+    </dhcp>
+  </ip>
+</network>

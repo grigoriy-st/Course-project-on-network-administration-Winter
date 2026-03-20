@@ -1,0 +1,11 @@
+<!-- ur-rr.xml -->
+<network>
+  <name>ur-rr</name>
+  <bridge name='vbr-ur-rr' stp='on' delay='0'/>
+  <ip address='172.16.2.254' netmask='255.255.255.252'>
+    <dhcp>
+      <host mac='52:54:00:aa:aa:02' ip='172.16.2.1'/> <!-- UR -->
+      <host mac='52:54:00:cc:cc:01' ip='172.16.2.2'/> <!-- RR -->
+    </dhcp>
+  </ip>
+</network>

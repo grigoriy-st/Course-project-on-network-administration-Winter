@@ -1,0 +1,15 @@
+<!-- lsw-pc1.xml -->
+<network>
+    <name>lsw-pc1</name>
+    <forward mode='bridge'/>
+    <bridge name='lsw-pc1'/>
+    <virtualport type='openvswitch'/>
+    <vlan>
+        <tag id='10'/>
+    </vlan>
+    <!-- <ip address='10.0.10.254' netmask='255.255.255.0'>
+        <dhcp>
+            <host mac='52:54:00:11:11:11' ip='10.0.10.10'/>
+        </dhcp>
+    </ip> -->
+</network>

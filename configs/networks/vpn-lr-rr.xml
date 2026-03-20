@@ -1,0 +1,12 @@
+<!-- vpn-lr-rr.xml -->
+<network>
+  <name>vpn-lr-rr</name>
+  <bridge name='vbr-vpn-lr-rr' stp='off' delay='0'/>
+  <mac address='52:54:00:77:77:77'/>
+  <ip address='10.255.0.1' netmask='255.255.255.252'>
+    <dhcp>
+      <host mac='52:54:00:bb:bb:10' ip='10.255.0.2'/>  <!-- OMS-LR -->
+      <host mac='52:54:00:cc:cc:10' ip='10.255.0.3'/>  <!-- OMS-RR -->
+    </dhcp>
+  </ip>
+</network>

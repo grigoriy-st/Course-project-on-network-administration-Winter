@@ -1,0 +1,10 @@
+<!-- lsw-pc2.xml -->
+<network>
+    <name>lsw-pc2</name>
+    <bridge name='lsw-pc2' stp='on' delay='0'/>
+    <ip address='10.0.99.254' netmask='255.255.255.0'>
+        <dhcp>
+            <host mac='52:54:00:22:22:22' ip='10.0.99.20'/>
+        </dhcp>
+    </ip>
+</network>

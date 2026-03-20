@@ -1,0 +1,15 @@
+<!-- rsw-pc4.xml -->
+<network>
+    <name>rsw-pc4</name>
+    <!-- <forward mode='bridge'/> -->
+    <bridge name='rsw-pc4' stp='on' delay='0'/>
+    <!-- <virtualport type='openvswitch'/>
+    <vlan>
+        <tag id='10'/>
+    </vlan> -->
+    <ip address='11.0.40.254' netmask='255.255.255.0'>
+        <dhcp>
+            <host mac='52:54:00:44:44:44' ip='11.0.40.40'/>
+        </dhcp>
+    </ip>
+</network>

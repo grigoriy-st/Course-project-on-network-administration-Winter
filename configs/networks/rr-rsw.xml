@@ -1,0 +1,7 @@
+<!-- rr-rsw.xml -->
+<network>
+    <name>rr-rsw</name>
+    <forward mode='bridge'/>
+    <bridge name='OMS-RSW'/>
+    <virtualport type='openvswitch'/>
+</network>

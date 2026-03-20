@@ -29,6 +29,11 @@ start_networks() {
 # create_network_files
 # start_networks
 
+clear_ovs_bridges() {
+  sudo ovs-vsctl del-br OMS-RSW
+  sudo ovs-vsctl del-br OMS-LSW
+}
+
 clear_all_networks() {
   for net_name in ${!LOCAL_NET_FILES[@]}; do
     sudo virsh net-destroy "$net_name"
@@ -63,5 +68,6 @@ start_virsh_networks() {
   done
 }
 
+clear_ovs_bridges
 clear_all_networks
 start_virsh_networks
