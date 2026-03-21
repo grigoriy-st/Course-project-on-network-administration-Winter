@@ -1,10 +1,19 @@
 #!/bin/bash
 
+# DIRS
 VMS_PATH="/mnt/Data_500GB/VMs/QEMU_KVM/Winter_Project"
 ISO_IMGS_PATH="/mnt/Data_500GB/VMs/ISOs"
+SOCKET_DIR="$HOME/.qemu-sockets"
+LOCAL_PROJECT_DIR="/mnt/Data_500GB/__REMOTE__/Course-project-on-network-administration-Winter"
+KICKSTARTER_DIR="$LOCAL_PROJECT_DIR/configs/vms/ks"
+PRESEED_DIR="$LOCAL_PROJECT_DIR/configs/vms/preseed"
+NEW_TEMP_DIR="/mnt/Data_500GB/tmp"
+
+# ISOs
 ELTEX_VM_ISO="$ISO_IMGS_PATH/Network_vms/Eltex/vesr-1.37.4-build2.iso"
 REDOS_VM_ISO="$ISO_IMGS_PATH/Russian_OSs/redos-8-20250711.4.iso"
 ASTRA_VM_ISO="$ISO_IMGS_PATH/Russian_OSs/orel-stable.iso"
+
 
 # VMS
 ELTEX_VM_NAMES=(
@@ -14,20 +23,23 @@ ELTEX_VM_NAMES=(
     "OMS-D2-RR"
 )
 
-HOST_VMS=(
+declare -A HOST_VMS=(
     # host_name : "os_type, vcpus, ram, rom"
-    ["pc1-staff"]="astra, 1, 2GB, 10GB"
-    ["pc2-admin"]="redos, 2, 2GB, 20GB"
-    ["pc3-contractor"]="astra, 1, 2GB, 10GB"
-    ["oms-rs1"]="redos, 2, 2GB, 20GB"
+    ["pc1-staff"]="astra, 1, 2048, 10G"
+    # ["pc2-admin"]="redos, 2, 2048, 20G"
+    # ["pc3-contractor"]="astra, 1, 2048, 10G"
+    # ["rs1"]="redos, 2, 2048, 20G"
 )
 
-SOCKET_DIR="$HOME/.qemu-sockets"
 declare -A VNC_VM_PORTS=(
     ["DomRu-ISP"]=5901
     ["OMS-UR"]=5902
     ["OMS-D1-LR"]=5903
     ["OMS-D2-RR"]=5904
+    ["pc1-staff"]=5905
+    ["pc2-admin"]=5906
+    ["pc3-contractor"]=5907
+    ["rs1"]=5908
 )
 
 # NETWORKS
@@ -61,6 +73,11 @@ declare -A VM_NETWORKS=(
     ["OMS-UR"]="default,ur-lr,ur-rr"
     ["OMS-D1-LR"]="ur-lr,lr-lsw,r-lr-rsw"
     ["OMS-D2-RR"]="ur-rr,r-rr-lsw"
+    # ["pc1-staff"]="default,lsw-pc1"
+    # ["pc2-admin"]="lsw-pc2"
+    ["pc1-staff"]="default,OMS-LSW"
+    ["pc2-admin"]="OMS-LSW"
+    ["rs1"]="OMS-LSW"
     # ["OMS-WRR1"]="guest"
     # ["OMS-LSW"]="ur-lr,r-rr-lsw"
     # ["OMS-RSW"]="r-lr-rsw,guest"
