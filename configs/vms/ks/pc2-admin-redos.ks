@@ -7,7 +7,7 @@ lang ru_RU.UTF-8
 keyboard ru
 
 # Network
-network --bootproto=dhcp --device=eth0 --onboot=on --hostname=redos-vm
+network --bootproto=dhcp --device=eth0 --onboot=on --hostname=pc2-admin
 
 # Root password
 rootpw --iscrypted $6$BEycOAq.x8znuX4H$otJzGzCPO6.8R2ChfWrEefVSv0odezrWJflN5md7GSRfaBVSTZEKg2tQU97VqJwg4WlFptc7u2JAZ4na/RKdc.
@@ -53,7 +53,6 @@ qemu-guest-agent
 -iwl*firmware
 %end
 
-# Post-installation scripts
 %post
 # Enable and start services
 systemctl enable sshd
@@ -78,7 +77,6 @@ EOF
 %end
 
 %pre
-# Pre-installation setup
 echo "Starting RedOS installation"
 %end
 

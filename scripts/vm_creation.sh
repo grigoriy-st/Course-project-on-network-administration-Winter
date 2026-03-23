@@ -62,71 +62,99 @@ create_linux_vms() {
     for vm_name in "${!HOST_VMS[@]}"; do
         local vm_data_arr
         IFS=', ' read -ra vm_data_arr <<< "${HOST_VMS[$vm_name]}"
-        # echo "${vm_data_arr[@]}"
+        
         local os_type="${vm_data_arr[0]}"
         local iso_path 
-        # -- TO DO -- 
-        # local auto_cfg_path # Auto setup config
-        # local l_extra_args  # local extra flags
-        # case "$os_type" in
-        #     "redos")
-        #         iso_path="$REDOS_VM_ISO"
-        #         auto_cfg_path="$KICKSTARTER_DIR/rs1-redos.ks"
-        #         l_extra_args="inst.ks=file:/ks.cfg console=tty0 console=ttyS0,115200"
-        #         ;;
-        #     "astra")
-        #         iso_path="$ASTRA_VM_ISO"
-        #         auto_cfg_path="$PRESEED_DIR/$vm_name-astra.cfg"
-        #         l_extra_args="auto=true priority=critical preseed/file=/preseed.cfg"
-        #         ;;
-        #     *)
-        #         echo "Error: Unknown os type"
-        #         return 1
-        #         ;;
-        # esac
+        
+        local auto_cfg_path # Auto setup config
+        local l_extra_args  # local extra flags
+        local http_root
+
+        case "$os_type" in
+            "redos")
+                iso_path="$REDOS_VM_ISO"
+                auto_cfg_path="$KICKSTARTER_DIR/$vm_name-redos.ks"
+                http_root="${NEW_TEMP_DIR}/redos-http-${vm_name}"
+                # Для локального location используем file:// путь
+                l_extra_args="inst.ks=file:/$(basename "$auto_cfg_path") inst.text console=tty0 console=ttyS0,115200"
+                ;;
+            "astra")
+                iso_path="$ASTRA_VM_ISO"
+                auto_cfg_path="$PRESEED_DIR/$vm_name-astra.cfg"
+                l_extra_args="auto=true priority=critical preseed/file=/preseed.cfg"
+                ;;
+            *)
+                echo "Error: Unknown os type"
+                return 1
+                ;;
+        esac
 
         local vcpus="${vm_data_arr[1]}"
         local ram="${vm_data_arr[2]}"
         local rom="${vm_data_arr[3]::-1}"
         local qcow2_path="$VMS_PATH/$vm_name.qcow2"
         local vnc_port=${VNC_VM_PORTS[$vm_name]}
+        local socket_path="${SOCKET_DIR}/${vm_name}.sock"
+
+        printf "qcow2_path: %s\niso_path: %s\n" "$qcow2_path" "$iso_path"
+        rm -f "$socket_path"
 
         local network_args=()
         while IFS= read -r arg; do
             [[ -n "$arg" ]] && network_args+=("$arg")
         done < <(build_network_args "$vm_name")
 
+        if [[ ! -f "$auto_cfg_path" ]]; then
+            echo "ERROR: Kickstart file not found: $auto_cfg_path"
+            return 1
+        fi
+        
+        # Монтируем ISO
+        sudo mkdir -p "/mnt/iso/${vm_name}"
+        sudo mount -o loop,ro "$iso_path" "/mnt/iso/${vm_name}"
+        
+        # Проверка монтирования
+        if [[ ! -f "/mnt/iso/${vm_name}/.treeinfo" ]]; then
+            echo "ERROR: ISO mount failed"
+            sudo umount "/mnt/iso/${vm_name}"
+            return 1
+        fi
+
         if [[ "$os_type" == "redos" ]]; then
-            cmd=(
-                sudo virt-install \
-                --name "$vm_name" \
-                --vcpus "$vcpus" \
-                --memory "$ram" \
-                --location "$iso_path" \
-                # --location file://$ASTRA_VM_ISO \
-                # --initrd-inject "$auto_cfg_path" \
-                # --extra-args "$l_extra_args" \
-                --disk path="$qcow2_path",size=$rom \
-                "${network_args[@]}" \
+            sudo mkdir -p "/mnt/iso/${vm_name}"
+            sudo mount -o loop,ro "$iso_path" "/mnt/iso/${vm_name}"
+            
+            sudo virt-install \
+                --name pc1-staff \
+                --vcpus 2 \
+                --memory 2048 \
+                --disk path="$qcow2_path",size="$rom",bus=virtio \
+                --cdrom "$REDOS_VM_ISO" \
+                --network type=ethernet,source=OMS-LSW,model=virtio \
                 --graphics vnc,port="$vnc_port" \
                 --console pty,target_type=serial \
                 --os-variant rhel8.0 \
-                --noautoconsole \
-                --wait -1
-            )
+                --noautoconsole
+
         elif [[ "$os_type" == "astra" ]]; then
+            sudo mkdir -p "/mnt/iso/$os_type"
+            sudo mount -o loop "$iso_path" "/mnt/iso/$os_type"
+
             cmd=(
-                sudo virt-install \
+                sudo virt-install
                 --name "$vm_name" \
                 --vcpus "$vcpus" \
                 --memory "$ram" \
                 --cdrom "$iso_path" \
+                # --cdrom "$iso_path" \
                 # --boot cdrom \
+                --disk path="$qcow2_path",size="$rom",bus=virtio \
                 # --initrd-inject "$auto_cfg_path" \
                 # --extra-args "$l_extra_args" \
-                --disk path="$qcow2_path",size="$rom",bus=virtio \
-                --controller type=scsi,model=virtio-scsi \
-                "${network_args[@]}" \
+                # --controller type=scsi,model=virtio-scsi \
+                # --network type=direct,source=OMS-LSW,source_mode=bridge,model=virtio \
+                "${networks_args[@]}" \
+                --serial "unix,path=$socket_path,mode=bind" \
                 --graphics vnc,port="$vnc_port" \
                 --console pty,target_type=serial \
                 --os-variant debian10 \
@@ -134,19 +162,42 @@ create_linux_vms() {
                 --wait -1
             )
         fi
-        
+ 
         # printf '%s\n' "${cmd[*]}" 
         "${cmd[@]}"
+        sudo chown "$USER:$USER" "$socket_path" 2>/dev/null
+
+        echo "Clean extra data?(y/n)"
+        local answer
+        read answer
+        
+        if [[ "$answer" == "y" ]]; then
+            sudo kill $HTTP_PID
+            sudo umount "/mnt/iso/${vm_name}" 2>/dev/null
+            sudo kill $HTTP_PID 2>/dev/null
+            sudo umount "/mnt/iso/${vm_name}"
+            rm -rf "$http_root"
+        else
+            echo "Iso image /mnt/iso/$os_type is mounted"
+        fi
 
         if [ $? -eq 0 ]; then
             echo "vncviewer localhost:$vnc_port"
         else
             echo "Error in creation $vm_name"
         fi
+
+        break
     done
-    :
 }
 
+clear_ex_host_vms() {
+    for vm_name in "${!HOST_VMS[@]}"; do
+        sudo virsh shutdown $vm_name 2>/dev/null
+        sudo virsh destroy $vm_name  2>/dev/null
+        sudo virsh undefine $vm_name 2>/dev/null
+    done
+}
 create_vesr_vms() {
     for vm_name in "${ELTEX_VM_NAMES[@]}"; do
         local vnc_port=${VNC_VM_PORTS[$vm_name]}
@@ -183,6 +234,7 @@ create_vesr_vms() {
 # create_vm_images
 # create_vesr_images
 # create_vesr_vms
+clear_ex_host_vms
 create_linux_images
 create_linux_vms
 # start_qemu_vms

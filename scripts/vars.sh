@@ -25,8 +25,8 @@ ELTEX_VM_NAMES=(
 
 declare -A HOST_VMS=(
     # host_name : "os_type, vcpus, ram, rom"
-    ["pc1-staff"]="astra, 1, 2048, 10G"
-    # ["pc2-admin"]="redos, 2, 2048, 20G"
+    # ["pc1-staff"]="redos, 2, 2048, 20G"
+    ["pc2-admin"]="redos, 2, 2048, 20G"
     # ["pc3-contractor"]="astra, 1, 2048, 10G"
     # ["rs1"]="redos, 2, 2048, 20G"
 )
@@ -75,9 +75,10 @@ declare -A VM_NETWORKS=(
     ["OMS-D2-RR"]="ur-rr,r-rr-lsw"
     # ["pc1-staff"]="default,lsw-pc1"
     # ["pc2-admin"]="lsw-pc2"
-    ["pc1-staff"]="default,OMS-LSW"
-    ["pc2-admin"]="OMS-LSW"
-    ["rs1"]="OMS-LSW"
+    # ["pc1-staff"]="lsw-pc1"
+    ["pc1-staff"]="OMS-LSW"
+    ["pc2-admin"]="default,lsw-pc2"
+    # ["rs1"]="default,rsw-rs1"
     # ["OMS-WRR1"]="guest"
     # ["OMS-LSW"]="ur-lr,r-rr-lsw"
     # ["OMS-RSW"]="r-lr-rsw,guest"
