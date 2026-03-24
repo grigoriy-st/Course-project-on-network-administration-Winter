@@ -1,5 +1,6 @@
 #!/bin/bash
 
+MY_LOCAL_NET_INT=enp7s0
 # DIRS
 VMS_PATH="/mnt/Data_500GB/VMs/QEMU_KVM/Winter_Project"
 ISO_IMGS_PATH="/mnt/Data_500GB/VMs/ISOs"
@@ -26,9 +27,9 @@ ELTEX_VM_NAMES=(
 declare -A HOST_VMS=(
     # host_name : "os_type, vcpus, ram, rom"
     # ["pc1-staff"]="redos, 2, 2048, 20G"
-    ["pc2-admin"]="redos, 2, 2048, 20G"
+    # ["pc2-admin"]="redos, 2, 4096, 20G"
     # ["pc3-contractor"]="astra, 1, 2048, 10G"
-    # ["rs1"]="redos, 2, 2048, 20G"
+    ["rs1"]="redos, 2, 4096, 20G"
 )
 
 declare -A VNC_VM_PORTS=(
