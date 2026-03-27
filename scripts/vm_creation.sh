@@ -198,7 +198,7 @@ setup_http_server() {
     local copy_over=0
     if [ -d "$install_tree_dir" ]; then
         local answer
-        echo "Folder $install_tree_dir is existing! Update data?(y/n)"
+        echo -n "Folder $install_tree_dir is existing! Update data?(y/n)"
         read -r answer
         if [[ "${answer,,}" == "y" ]]; then
             copy_over=1
@@ -232,6 +232,8 @@ setup_http_server() {
         fi
     fi
     
+    mkdir $install_tree_dir
+
     echo "Checking install_tree structure:"
     ls -la "$install_tree_dir"
     if [[ -d "$install_tree_dir/repodata" ]]; then
@@ -260,7 +262,7 @@ cleanup_vm_deployment() {
     local vm_name="${vm_config["host_name"]}"
     local http_root="${vm_config["http_root"]}"
     
-    echo "Clean up VM $vm_name deployment? (y/n)"
+    echo -n "Clean up VM $vm_name deployment? (y/n): "
     local answer
     read answer
     
@@ -304,7 +306,7 @@ create_linux_images() {
     # print_vm_config vm_config
     for vm_name in "${!HOST_VMS[@]}"; do
         local rom="${vm_config["rom"]}"
-        qemu-img create -f qcow2 "$VMS_PATH/$vm_name.qcow2" $rom
+        qemu-img create -f qcow2 "$VMS_PATH/$vm_name.qcow2" "${rom}G"
     done
 }
 

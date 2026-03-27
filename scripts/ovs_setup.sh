@@ -2,12 +2,13 @@
 
 clean_old_ports() {
     for br in OMS-LSW OMS-RSW; do
-        for port in lsw-pc1 lsw-pc2 rsw-pc3 rsw-pc4 rsw-pc5; do
+        for port in lsw-pc1 lsw-pc2 rsw-pc3 rsw-pc4 rsw-rs1 rsw-pc5; do
             sudo ovs-vsctl del-port $br $port 2>/dev/null
         done
+        sudo ovs-vsctl del-br $br
     done
     
-    for port in lsw-pc1 lsw-pc2 rsw-pc3 rsw-pc4 rsw-pc5; do
+    for port in lsw-pc1 lsw-pc2 rsw-pc3 rsw-rs1 rsw-pc4 rsw-pc5; do
         sudo ip link delete $port 2>/dev/null
     done  
 }
@@ -36,6 +37,7 @@ create_oms_lsw() {
     sudo ovs-vsctl set port lr-lsw trunks=10,99
 
     sudo ip link set lr-lsw up
+
     # OMS-LSW -> PC1 (access VLAN 10)
     sudo ovs-vsctl add-port OMS-LSW lsw-pc1 -- set Interface lsw-pc1 type=internal
     sudo ovs-vsctl set port lsw-pc1 vlan_mode=access tag=10
@@ -66,11 +68,11 @@ create_oms_rsw() {
     sudo ip link set rsw-pc3 up
     sudo ip addr add 10.0.30.254/24 dev rsw-pc3 2>/dev/null || true
 
-    # OMS-RSW -> PC4 (access VLAN 40)
-    sudo ovs-vsctl add-port OMS-RSW rsw-pc4 -- set Interface rsw-pc4 type=internal
-    sudo ovs-vsctl set port rsw-pc4 vlan_mode=access tag=40
-    sudo ip link set rsw-pc4 up
-    sudo ip addr add 10.0.40.254/24 dev rsw-pc4 2>/dev/null || true
+    # OMS-RSW -> RS1 (access VLAN 40)
+    sudo ovs-vsctl add-port OMS-RSW rsw-rs1 -- set Interface rsw-rs1 type=internal
+    sudo ovs-vsctl set port rsw-rs1 vlan_mode=access tag=40
+    sudo ip link set rsw-rs1 up
+    sudo ip addr add 10.0.40.254/24 dev rsw-rs1 2>/dev/null || true
 
 
     # OMS-RSW -> PC5 (access VLAN 50)

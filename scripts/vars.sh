@@ -26,10 +26,10 @@ ELTEX_VM_NAMES=(
 
 declare -A HOST_VMS=(
     # host_name : "os_type, vcpus, ram, rom"
-    # ["pc1-staff"]="redos, 2, 2048, 20G"
+    ["pc1-staff"]="redos, 2, 4096, 20G"
     # ["pc2-admin"]="redos, 2, 4096, 20G"
     # ["pc3-contractor"]="astra, 1, 2048, 10G"
-    ["rs1"]="redos, 2, 4096, 20G"
+    # ["rs1"]="redos, 2, 4096, 20G"
 )
 
 declare -A VNC_VM_PORTS=(
@@ -62,7 +62,7 @@ declare -A LOCAL_NET_FILES=(
     ["lsw-pc1"]="lsw-pc1"
     ["lsw-pc2"]="lsw-pc2"
     ["rsw-pc3"]="rsw-pc3"
-    ["rsw-pc4"]="rsw-pc4"
+    ["rsw-rs1"]="rsw-rs1"
     ["rsw-pc5"]="rsw-pc5"
     # reserve routes
     ["r-lr-rsw"]="r-lr-rsw"
@@ -79,7 +79,7 @@ declare -A VM_NETWORKS=(
     # ["pc1-staff"]="lsw-pc1"
     ["pc1-staff"]="OMS-LSW"
     ["pc2-admin"]="default,lsw-pc2"
-    # ["rs1"]="default,rsw-rs1"
+    ["rs1"]="default,rsw-rs1"
     # ["OMS-WRR1"]="guest"
     # ["OMS-LSW"]="ur-lr,r-rr-lsw"
     # ["OMS-RSW"]="r-lr-rsw,guest"
